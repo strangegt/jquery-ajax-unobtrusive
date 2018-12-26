@@ -188,7 +188,7 @@
         }, 0);
     });
 
-    $(document).on("submit", "form[data-ajax=true]", function (evt) {
+   $(document).on("submit", "form[data-ajax=true]", function (evt) {
         var clickInfo = $(this).data(data_click) || [],
             clickTarget = $(this).data(data_target),
             isCancel = clickTarget && (clickTarget.hasClass("cancel") || clickTarget.attr('formnovalidate') !== undefined);
@@ -196,8 +196,14 @@
         if (!isCancel && !validate(this)) {
             return;
         }
+        //new code
+        var action = this.action;
+        if (clickTarget[0].formAction) {
+            action = clickTarget[0].formAction;
+        }
+        //end new code
         asyncRequest(this, {
-            url: this.action,
+            url: action, // replaced this.action by action
             type: this.method || "GET",
             data: clickInfo.concat($(this).serializeArray())
         });
